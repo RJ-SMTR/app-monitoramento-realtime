@@ -29,6 +29,7 @@ function Tables() {
 
   return (
     <div >
+        
         <table>
             <thead>
                 <th>

@@ -21,6 +21,10 @@ export function MovingMarkerProvider({ children }) {
 
     useEffect(() => {
         if (realtimeBrt && realtimeSPPO) {
+            const max_latitude = -22.59
+            const min_latitude = -23.13
+           const max_longitude = -43.0
+        const  min_longitude = -43.87
             const scale = 1.5
             const garagePolygons = garages.map((garage, index) => ({
                 type: 'Feature',
@@ -36,18 +40,20 @@ export function MovingMarkerProvider({ children }) {
                 const scaledPolygon = turf.transformScale(garage, scale);
                 return scaledPolygon;
             })
+           
 
             const uniqueTrackedItems = realtimeBrt.reduce((uniqueItems, item) => {
-                if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)) {
+                if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)){
                     uniqueItems.push(item);
                 }
                 return uniqueItems;
             }, []);
-            const filteredBRT = uniqueTrackedItems.filter(item => {
-           
-                const point = turf.point([item.longitude, item.latitude]);
 
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage));
+
+
+            const filteredBRT = uniqueTrackedItems.filter(item => {
+                const point = turf.point([item.longitude, item.latitude]);
+                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude;
             });
             setTracked(filteredBRT);
 
@@ -73,7 +79,7 @@ export function MovingMarkerProvider({ children }) {
                 const longitude = parseFloat(item.longitude.replace(',', '.'));
                 const point = turf.point([longitude, latitude]);
 
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage));
+                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude;
             });
             setTrackedSPPO(filteredSPPO);
             
