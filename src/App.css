@@ -24,7 +24,7 @@
   z-index: 11111;
   position: fixed;
   color: black;
-  top: 20px;
+  top: 35px;
   right: 20px ;
   display: flex;
     flex-direction: column;
@@ -65,4 +65,18 @@
 }
 .my-10{
   margin-block: 1rem;
+}
+.logos{
+  padding: .5rem;
+  position: fixed;
+  z-index: 1111;
+  top: 0;
+  left:0;
+  display: flex;
+}
+.info{
+  background-color: white;
+  color: #000;
+  padding: .5rem;
+
 }

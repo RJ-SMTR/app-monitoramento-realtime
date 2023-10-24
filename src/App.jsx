@@ -7,6 +7,7 @@ import BusMarker from "./components/MovingMarkersBRT"
 import BusMarkerSPPO from "./components/MovingMarkerSPPO"
 import Tables from "./components/table"
 import TablesBRT from "./components/tableBRT"
+import Logos from "./components/logos"
 
 function App() {
   const { tracked, trackedSPPO, selectedLinhas, selectedBRT } = useContext(MovingMarkerContext)
@@ -21,6 +22,8 @@ function App() {
 
   return (
     <>
+      
+    <Logos/>
 <div className="tables">
       <Tables/>
       <TablesBRT/>
@@ -53,9 +56,7 @@ function App() {
             : <></>
           }
       </LayerGroup>
-      <LayerGroup>
-        
-      </LayerGroup>
+      
         <ComponentResize />
     </MapContainer>
      
