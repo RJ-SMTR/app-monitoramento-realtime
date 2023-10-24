@@ -63,3 +63,6 @@
 .select{
   max-width: 208px !important;
 }
+.my-10{
+  margin-block: 1rem;
+}

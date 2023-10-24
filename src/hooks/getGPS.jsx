@@ -47,7 +47,7 @@ export function GPSProvider({ children }) {
     useEffect(() => {
        getGPSAndSPPO()
 
-        const interval = setInterval(getGPSAndSPPO, 300000);
+        const interval = setInterval(getGPSAndSPPO, 60000);
 
         return () => clearInterval(interval);
     }, []);
