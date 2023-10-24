@@ -28,7 +28,7 @@ function App() {
       <Tables/>
       <TablesBRT/>
 </div>
-      <MapContainer center={[-22.935872, -43.455088]} zoom={11} >
+      <MapContainer center={[-22.935872, -43.455088]} zoom={12} >
 
         <TileLayer
           onLoad={(e) => { e.target._map.invalidateSize() }}
