@@ -1,33 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { LayerGroup, MapContainer, TileLayer } from "react-leaflet"
+import { useContext} from "react"
 import './App.css'
+import { useMap } from 'react-leaflet/hooks'
+import { MovingMarkerContext } from "./hooks/getMovingMarkers"
+import BusMarker from "./components/MovingMarkersBRT"
+import BusMarkerSPPO from "./components/MovingMarkerSPPO"
+import SearchBar from "./components/searchBar"
+import Tables from "./components/table"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { tracked, trackedSPPO, selectedLinhas } = useContext(MovingMarkerContext)
+  const ComponentResize = () => {
+    const map = useMap()
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 0)
+    return null
+  }
+
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <SearchBar/>
+    <Tables/>
+      <MapContainer center={[-22.935872, -43.455088]} zoom={11} >
+
+        <TileLayer
+          onLoad={(e) => { e.target._map.invalidateSize() }}
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
+        />
+        <div id="map"></div>
+      <LayerGroup>
+          {tracked ? tracked.map((e) => {
+            return <div key={e.code}>
+              <BusMarker key={e.code} id={e.code} data={e} />
+            </div>
+          }) : <></>}
+      </LayerGroup>
+      <LayerGroup>
+          {trackedSPPO
+            ? trackedSPPO
+              .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.linha))
+              .map(e => (
+                <div key={e.ordem}>
+                  <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} />
+                </div>
+              ))
+            : <></>
+          }
+      </LayerGroup>
+      <LayerGroup>
+        
+      </LayerGroup>
+        <ComponentResize />
+    </MapContainer>
+     
     </>
   )
 }
