@@ -38,13 +38,16 @@ export function GPSProvider({ children }) {
                 allSPPO = []
             })
     }
-   
-    useEffect(() => {
-        
+    function getGPSAndSPPO() {
         getGPS()
         getSPPO()
+    }
 
-        const interval = setInterval(getGPS, 300000);
+   
+    useEffect(() => {
+       getGPSAndSPPO()
+
+        const interval = setInterval(getGPSAndSPPO, 300000);
 
         return () => clearInterval(interval);
     }, []);
