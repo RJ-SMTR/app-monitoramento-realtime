@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   name: monitoramento-realtime
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
       app: monitoramento-realtime
@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: monitoramento-realtime
-          image: gcr.io/PROJECT_ID/IMAGE_APP:TAG
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
           ports:
             - containerPort: 80
       restartPolicy: Always
@@ -65,7 +65,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: mobilidade-app
+                name: monitoramento-realtime
                 port:
                   number: 80
 
@@ -76,7 +76,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: letsencrypt
-  namespace: monitoramento
+  namespace: monitoramento-realtime
 spec:
   acme:
     email: caiorsantos.smtr@gmail.com
