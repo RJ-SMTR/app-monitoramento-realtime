@@ -51,16 +51,18 @@ function Tables() {
             </tbody>
         </table>
           <div className="my-10">
-             <label >Selecionar Linha SPPO: </label>
-             <Select
-                 value={selectedLinhas}
-                 onChange={handleChange}
-                 options={options}
-                 isMulti
-                 isSearchable
-                 placeholder="Ex.: 101"
-                 className="select"
-             />
+             <div className="my-10">
+             <label  >Selecionar Linha SPPO: </label>
+                <Select
+                    value={selectedLinhas}
+                    onChange={handleChange}
+                    options={options}
+                    isMulti
+                    isSearchable
+                    placeholder="Ex.: 101"
+                    className="select"
+                />
+         </div>
          </div>
           <table className="flex">
               <thead>
