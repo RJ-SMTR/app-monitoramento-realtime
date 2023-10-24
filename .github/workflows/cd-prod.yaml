@@ -63,13 +63,13 @@ jobs:
 
       - name: Set up Kustomize
         run: |-
-          cd ./.k8s/prod
+          cd ./k8s/prod
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
           chmod u+x ./kustomize
 
       - name: Deploy
         run: |-
-          cd ./.k8s/prod
+          cd ./k8s/prod
           ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
           ./kustomize build . | kubectl apply -n monitoramento-realtime -f -
           kubectl get services -n monitoramento-realtime -o wide
