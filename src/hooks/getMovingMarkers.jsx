@@ -38,7 +38,6 @@ export function MovingMarkerProvider({ children }) {
                 const fiveMinutesAgo = subMinutes(currentTime, 5)
                 return isAfter(fiveMinutesAgo, itemTime);
             });
-            console.log(filteredSPPO)
 
             const uniqueItems = filteredSPPO.reduce((uniqueItems, item) => {
                 if (!uniqueItems.some(existingItem => existingItem.ordem === item.ordem)) {

@@ -56,7 +56,7 @@ function Tables() {
               options={options}
               isMulti
               isSearchable
-              placeholder="Select Linhas"
+              placeholder="Ex.: 101"
               className="select"
           />
           <table className="flex">
