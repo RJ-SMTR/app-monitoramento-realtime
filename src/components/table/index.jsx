@@ -28,7 +28,7 @@ function Tables() {
     };
 
   return (
-    <div className="tables">
+    <div >
         <table>
             <thead>
                 <th>
@@ -49,16 +49,18 @@ function Tables() {
                 
             </tbody>
         </table>
-          <label>Selecionar Linha SPPO: </label>
-          <Select
-              value={selectedLinhas}
-              onChange={handleChange}
-              options={options}
-              isMulti
-              isSearchable
-              placeholder="Ex.: 101"
-              className="select"
-          />
+          <div className="my-10">
+             <label >Selecionar Linha SPPO: </label>
+             <Select
+                 value={selectedLinhas}
+                 onChange={handleChange}
+                 options={options}
+                 isMulti
+                 isSearchable
+                 placeholder="Ex.: 101"
+                 className="select"
+             />
+         </div>
           <table className="flex">
               <thead>
                 <tr>SPPO</tr>

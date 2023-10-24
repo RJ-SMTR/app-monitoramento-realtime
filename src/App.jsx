@@ -5,11 +5,11 @@ import { useMap } from 'react-leaflet/hooks'
 import { MovingMarkerContext } from "./hooks/getMovingMarkers"
 import BusMarker from "./components/MovingMarkersBRT"
 import BusMarkerSPPO from "./components/MovingMarkerSPPO"
-import SearchBar from "./components/searchBar"
 import Tables from "./components/table"
+import TablesBRT from "./components/tableBRT"
 
 function App() {
-  const { tracked, trackedSPPO, selectedLinhas } = useContext(MovingMarkerContext)
+  const { tracked, trackedSPPO, selectedLinhas, selectedBRT } = useContext(MovingMarkerContext)
   const ComponentResize = () => {
     const map = useMap()
     setTimeout(() => {
@@ -21,8 +21,10 @@ function App() {
 
   return (
     <>
-    <SearchBar/>
-    <Tables/>
+<div className="tables">
+      <Tables/>
+      <TablesBRT/>
+</div>
       <MapContainer center={[-22.935872, -43.455088]} zoom={11} >
 
         <TileLayer
@@ -32,11 +34,12 @@ function App() {
         />
         <div id="map"></div>
       <LayerGroup>
-          {tracked ? tracked.map((e) => {
-            return <div key={e.code}>
-              <BusMarker key={e.code} id={e.code} data={e} />
-            </div>
-          }) : <></>}
+          {tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.trip_short_name))
+            .map(e => (
+              <div key={e.code}>
+                <BusMarker key={e.code} id={e.code} data={e} />
+              </div>
+            )) : <></>}
       </LayerGroup>
       <LayerGroup>
           {trackedSPPO
