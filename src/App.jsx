@@ -5,9 +5,11 @@ import { useMap } from 'react-leaflet/hooks'
 import { MovingMarkerContext } from "./hooks/getMovingMarkers"
 import BusMarker from "./components/MovingMarkersBRT"
 import BusMarkerSPPO from "./components/MovingMarkerSPPO"
+import SearchBar from "./components/searchBar"
+import Tables from "./components/table"
 
 function App() {
-  const { tracked, trackedSPPO } = useContext(MovingMarkerContext)
+  const { tracked, trackedSPPO, selectedLinhas } = useContext(MovingMarkerContext)
   const ComponentResize = () => {
     const map = useMap()
     setTimeout(() => {
@@ -19,6 +21,8 @@ function App() {
 
   return (
     <>
+    <SearchBar/>
+    <Tables/>
       <MapContainer center={[-22.935872, -43.455088]} zoom={11} >
 
         <TileLayer
@@ -35,11 +39,16 @@ function App() {
           }) : <></>}
       </LayerGroup>
       <LayerGroup>
-          {trackedSPPO ? trackedSPPO.map((e) => {
-            return <div key={e.ordem}>
-              <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} />
-            </div>
-          }) : <></>}
+          {trackedSPPO
+            ? trackedSPPO
+              .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.linha))
+              .map(e => (
+                <div key={e.ordem}>
+                  <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} />
+                </div>
+              ))
+            : <></>
+          }
       </LayerGroup>
       <LayerGroup>
         

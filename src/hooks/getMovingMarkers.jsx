@@ -13,6 +13,7 @@ export function MovingMarkerProvider({ children }) {
 
     const { realtimeBrt, realtimeSPPO } = useContext(GPSContext)
     const [tracked, setTracked] = useState([])
+    const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [trackedSPPO, setTrackedSPPO] = useState([])
 
 
@@ -69,7 +70,7 @@ export function MovingMarkerProvider({ children }) {
 
 
     return (
-        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO }}>
+        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas }}>
             {children}
         </MovingMarkerContext.Provider>
     )

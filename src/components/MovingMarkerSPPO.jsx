@@ -43,7 +43,7 @@ export default function BusMarkerSPPO({ id, data }) {
                 key={id}
             >
                 <Popup>
-                    {data.ordem ? <h4 className="mb-1"> Código: {data.ordem} </h4> : <></>}
+                    {data.ordem ? <h4 className="mb-1"> Veículo: {data.ordem} </h4> : <></>}
                     <div className="flex items-center">
                         <h4 > Linha: <span className="font-bold">{data.linha}</span></h4>
                         <h4 > Última atualização: <span className="font-bold">{trimmed[1]}</span></h4>

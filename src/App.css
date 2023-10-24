@@ -12,3 +12,54 @@
 .leaflet-popup-content{
                       line-height: .3 !important;
 }
+.search{
+  z-index: 11111;
+  position: fixed;
+  color: black;
+  top: 20px;
+  right: 0 ;
+  left: 0;
+}
+.tables{
+  z-index: 11111;
+  position: fixed;
+  color: black;
+  top: 20px;
+  right: 20px ;
+  display: flex;
+    flex-direction: column;
+
+}
+.tables table{
+  padding: .4rem;
+  background: white;
+  border-radius: .4rem;
+}
+.tables label{
+    padding: .4rem;
+      background: white;
+      border-radius: .4rem;
+
+}
+.tablesBRT{
+  z-index: 11111;
+  position: fixed;
+  color: black;
+  top: 120px;
+  right: 20px ;
+
+}
+.tablesBRT table{
+  padding: .4rem;
+  background: white;
+  border-radius: .4rem;
+}
+.tablesBRT label{
+    padding: .4rem;
+      background: white;
+      border-radius: .4rem;
+
+}
+.select{
+  max-width: 208px !important;
+}
