@@ -38,7 +38,7 @@ export default function BusMarkerSPPO({ id, data }) {
                 icon={customMarker}
                 position={[latitude, longitude]}
                 previousPosition={prevPos}
-                duration={6000}
+                duration={1}
                 rotationAngle={0}
                 key={id}
             >

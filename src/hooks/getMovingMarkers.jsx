@@ -55,7 +55,8 @@ export function MovingMarkerProvider({ children }) {
                 const point = turf.point([item.longitude, item.latitude]);
                 return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude;
             });
-            setTracked(filteredBRT);
+            const sortedBrt =   filteredBRT.sort((a,b) => a.codigo - b.codigo)
+            setTracked(sortedBrt);
 
 
             const uniqueItems = realtimeSPPO.reduce((uniqueItems, item) => {
