@@ -10,7 +10,7 @@ import TablesBRT from "./components/tableBRT"
 import Logos from "./components/logos"
 
 function App() {
-  const { tracked, trackedSPPO, selectedLinhas, selectedBRT } = useContext(MovingMarkerContext)
+  const { tracked, trackedSPPO, selectedLinhas, selectedBRT, showSPPO, showBRT } = useContext(MovingMarkerContext)
   const ComponentResize = () => {
     const map = useMap()
     setTimeout(() => {
@@ -37,7 +37,7 @@ function App() {
         />
         <div id="map"></div>
       <LayerGroup>
-          {tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.trip_short_name))
+          {showBRT && tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.trip_short_name))
             .map(e => (
               <div key={e.code}>
                 <BusMarker key={e.code} id={e.code} data={e} />
@@ -45,7 +45,7 @@ function App() {
             )) : <></>}
       </LayerGroup>
       <LayerGroup>
-          {trackedSPPO
+          {showSPPO && trackedSPPO
             ? trackedSPPO
               .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.linha))
               .map(e => (
