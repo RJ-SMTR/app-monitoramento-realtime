@@ -33,7 +33,7 @@ export default function BusMarker({ id, data}) {
             icon={customMarker}
                 position={[data.latitude, data.longitude]}
                 previousPosition={prevPos}
-                duration={6000}
+                duration={1}
                 rotationAngle={0}
                 key={id}
             >

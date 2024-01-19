@@ -17,6 +17,8 @@ export function MovingMarkerProvider({ children }) {
     const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [selectedBRT, setSelectedBRT] = useState(null)
     const [trackedSPPO, setTrackedSPPO] = useState([])
+    const [showBRT, setShowBRT] = useState(true);
+    const [showSPPO, setShowSPPO] = useState(true);
 
 
     useEffect(() => {
@@ -53,9 +55,10 @@ export function MovingMarkerProvider({ children }) {
 
             const filteredBRT = uniqueTrackedItems.filter(item => {
                 const point = turf.point([item.longitude, item.latitude]);
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude;
+                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90');
             });
-            setTracked(filteredBRT);
+            const sortedBrt =   filteredBRT.sort((a,b) => a.codigo - b.codigo)
+            setTracked(sortedBrt);
 
 
             const uniqueItems = realtimeSPPO.reduce((uniqueItems, item) => {
@@ -79,7 +82,7 @@ export function MovingMarkerProvider({ children }) {
                 const longitude = parseFloat(item.longitude.replace(',', '.'));
                 const point = turf.point([longitude, latitude]);
 
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude;
+                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude ;
             });
             setTrackedSPPO(filteredSPPO);
             
@@ -104,7 +107,7 @@ export function MovingMarkerProvider({ children }) {
 
 
     return (
-        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT }}>
+        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, showBRT, setShowBRT, showSPPO, setShowSPPO }}>
             {children}
         </MovingMarkerContext.Provider>
     )
