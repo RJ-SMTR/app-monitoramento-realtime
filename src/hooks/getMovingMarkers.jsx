@@ -2,7 +2,8 @@
 import { createContext, useContext, useState, useEffect } from "react"
 import { GPSContext } from "./getGPS"
 import * as turf from '@turf/turf';
-import { garages } from "../components/garages/garages";
+import { wktRio } from '../components/polygon/holes.js'
+import wellknown from 'wellknown';
 
 
 
@@ -20,32 +21,28 @@ export function MovingMarkerProvider({ children }) {
     const [showBRT, setShowBRT] = useState(true);
     const [showSPPO, setShowSPPO] = useState(true);
 
+    const wktToGeoJson = (wkt) => {
+        const geometry = wellknown.parse(wkt);
+        return {
+            type: 'Feature',
+            geometry,
+        }
+
+    }
 
     useEffect(() => {
         if (realtimeBrt && realtimeSPPO) {
             const max_latitude = -22.59
             const min_latitude = -23.13
-           const max_longitude = -43.0
-        const  min_longitude = -43.87
-            const scale = 1.5
-            const garagePolygons = garages.map((garage, index) => ({
-                type: 'Feature',
-                properties: {
-                    id: index,
-                },
-                geometry: {
-                    type: 'Polygon',
-                    coordinates: [garage],
-                },
-            }))
-            const scaledGaragePolygons = garagePolygons.map((garage) => {
-                const scaledPolygon = turf.transformScale(garage, scale);
-                return scaledPolygon;
-            })
-           
+            const max_longitude = -43.0
+            const min_longitude = -43.87
+
+
+            const wktExample = wktRio
+            const geoJsonFromWkt = wktToGeoJson(wktExample)
 
             const uniqueTrackedItems = realtimeBrt.reduce((uniqueItems, item) => {
-                if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)){
+                if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)) {
                     uniqueItems.push(item);
                 }
                 return uniqueItems;
@@ -55,9 +52,9 @@ export function MovingMarkerProvider({ children }) {
 
             const filteredBRT = uniqueTrackedItems.filter(item => {
                 const point = turf.point([item.longitude, item.latitude]);
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90');
+                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90');
             });
-            const sortedBrt =   filteredBRT.sort((a,b) => a.codigo - b.codigo)
+            const sortedBrt = filteredBRT.sort((a, b) => a.codigo - b.codigo)
             setTracked(sortedBrt);
 
 
@@ -82,22 +79,22 @@ export function MovingMarkerProvider({ children }) {
                 const longitude = parseFloat(item.longitude.replace(',', '.'));
                 const point = turf.point([longitude, latitude]);
 
-                return !scaledGaragePolygons.some(garage => turf.booleanPointInPolygon(point, garage)) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude ;
+                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude;
             });
             setTrackedSPPO(filteredSPPO);
-            
+
         }
     }, [realtimeBrt, realtimeSPPO]);
 
 
 
- 
 
 
 
 
-  
-   
+
+
+
 
 
 
