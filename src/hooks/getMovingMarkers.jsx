@@ -52,7 +52,7 @@ export function MovingMarkerProvider({ children }) {
 
             const filteredBRT = uniqueTrackedItems.filter(item => {
                 const point = turf.point([item.longitude, item.latitude]);
-                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90');
+                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90') || item.codigo.startsWith('70') ;
             });
             const sortedBrt = filteredBRT.sort((a, b) => a.codigo - b.codigo)
             setTracked(sortedBrt);
@@ -79,8 +79,7 @@ export function MovingMarkerProvider({ children }) {
                 const longitude = parseFloat(item.longitude.replace(',', '.'));
                 const point = turf.point([longitude, latitude]);
 
-                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude;
-            });
+                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude   });
             setTrackedSPPO(filteredSPPO);
 
         }

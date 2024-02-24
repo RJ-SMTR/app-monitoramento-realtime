@@ -12,8 +12,8 @@ export function GPSProvider({ children }) {
     let allBuses = [];
 
     async function getGPS() {
-        await axios.get('https://api.mobilidade.rio/predictor/').then(({ data }) => {
-            data.results.forEach((item) => {
+        await axios.get('https://dados.mobilidade.rio/gps/brt').then(({ data }) => {
+            data.veiculos.forEach((item) => {
                 allBuses.push(item);
             });
             setRealtimeBrt([...allBuses]);
