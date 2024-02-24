@@ -37,10 +37,10 @@ function App() {
         />
         <div id="map"></div>
       <LayerGroup>
-          {showBRT && tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.trip_short_name))
+          {showBRT && tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.linha))
             .map(e => (
               <div key={e.code}>
-                <BusMarker key={e.code} id={e.code} data={e} />
+                <BusMarker key={e.codigo} id={e.codigo} data={e} />
               </div>
             )) : <></>}
       </LayerGroup>

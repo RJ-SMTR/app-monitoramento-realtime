@@ -10,7 +10,10 @@ import marker from '../assets/marker.svg'
 
 export default function BusMarker({ id, data}) {
     const [prevPositions, setPrevPositions] = useState({});
-    const trimmed = data.dataHora.match(/(\d{2}:\d{2}:\d{2})/)
+    const date = new Date(data.dataHora)
+    date.setUTCHours(date.getUTCHours() - 3)
+    const formattedDate = date.toISOString()
+    const trimmed = formattedDate.match(/(\d{2}:\d{2}:\d{2})/)
 
     useEffect(() => {
         setPrevPositions((prevPositions) => ({
@@ -40,9 +43,9 @@ export default function BusMarker({ id, data}) {
                 <Popup>
                     {data.codigo ? <h4 className="mb-1"> Veículo: {data.codigo} </h4> : <></>}
                     <div className="flex items-center">
-                        <h4 > Linha: <span className="font-bold">{data.trip_short_name}</span></h4>
-                        <h4 > Sentido: <span className="font-bold">{data.direction_id}</span></h4>
-                        <h4 > Última atualização: <span className="font-bold">{trimmed[1]}</span></h4>
+                        <h4 > Linha: <span className="font-bold">{data.linha}</span></h4>
+                        <h4 > Sentido: <span className="font-bold">{data.sentido}</span></h4>
+                        <h4 > Última atualização: <span className="font-bold">{trimmed[1]}</span></h4>s
                     </div>
                 </Popup>
             </LeafletTrackingMarker>
