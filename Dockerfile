@@ -7,7 +7,7 @@ COPY . ./
 RUN npm run build
 
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage .next /usr/share/nginx/html
+COPY --from=build-stage /app/.next /usr/share/nginx/html
 COPY nginx.conf /temp/nginx.conf
 RUN envsubst /app < /temp/nginx.conf > /etc/nginx/conf.d/default.conf
 EXPOSE 80
