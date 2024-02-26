@@ -1,5 +1,6 @@
 import { format } from "date-fns"
 import logo from "../../assets/logo.png"
+import Image from "next/image"
 function Logos() {
     const time = new Date()
     const formattedHora = format(time, "yyyy-MM-dd HH:mm:ss")
@@ -7,7 +8,7 @@ function Logos() {
     <div className="logos">
          
         <div>
-            <img width={150} src={logo}/>
+            <Image width={150} src={logo}/>
         </div>
           <div className="info">
               <h2>Painel de Últimas Posições dos Veículos - SPPO e BRT</h2>
