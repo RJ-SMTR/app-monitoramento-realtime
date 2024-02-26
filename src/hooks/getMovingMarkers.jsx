@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
+
+'use client'
 import { createContext, useContext, useState, useEffect } from "react"
-import { GPSContext } from "./getGPS"
 import * as turf from '@turf/turf';
 import { wktRio } from '../components/polygon/holes.js'
 import wellknown from 'wellknown';
@@ -11,9 +11,8 @@ import wellknown from 'wellknown';
 export const MovingMarkerContext = createContext()
 
 
-export function MovingMarkerProvider({ children }) {
+export function MovingMarkerProvider({ children, brt, sppo }) {
 
-    const { realtimeBrt, realtimeSPPO } = useContext(GPSContext)
     const [tracked, setTracked] = useState([])
     const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [selectedBRT, setSelectedBRT] = useState(null)
@@ -30,8 +29,9 @@ export function MovingMarkerProvider({ children }) {
 
     }
 
+
     useEffect(() => {
-        if (realtimeBrt && realtimeSPPO) {
+        if (brt && sppo) {
             const max_latitude = -22.59
             const min_latitude = -23.13
             const max_longitude = -43.0
@@ -41,7 +41,7 @@ export function MovingMarkerProvider({ children }) {
             const wktExample = wktRio
             const geoJsonFromWkt = wktToGeoJson(wktExample)
 
-            const uniqueTrackedItems = realtimeBrt.reduce((uniqueItems, item) => {
+            const uniqueTrackedItems = brt.veiculos.reduce((uniqueItems, item) => {
                 if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)) {
                     uniqueItems.push(item);
                 }
@@ -60,7 +60,7 @@ export function MovingMarkerProvider({ children }) {
             setTracked(sortedBrt);
 
 
-            const uniqueItems = realtimeSPPO.reduce((uniqueItems, item) => {
+            const uniqueItems = sppo.reduce((uniqueItems, item) => {
                 const existingItemIndex = uniqueItems.findIndex(existingItem => existingItem.ordem === item.ordem)
 
                 if (existingItemIndex === -1) {
@@ -86,7 +86,7 @@ export function MovingMarkerProvider({ children }) {
             setTrackedSPPO(filteredSPPO);
 
         }
-    }, [realtimeBrt, realtimeSPPO]);
+    }, [brt, sppo]);
 
 
 
