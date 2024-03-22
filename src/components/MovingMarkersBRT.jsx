@@ -45,6 +45,7 @@ export default function BusMarker({ id, data}) {
                     <div className="flex items-center">
                         <h4 > Linha: <span className="font-bold">{data.linha}</span></h4>
                         <h4 > Sentido: <span className="font-bold">{data.sentido}</span></h4>
+                        <h4 > Velocidade: <span className="font-bold">{data.velocidade}km/h</span></h4>
                         <h4 > Última atualização: <span className="font-bold">{trimmed[1]}</span></h4>s
                     </div>
                 </Popup>
