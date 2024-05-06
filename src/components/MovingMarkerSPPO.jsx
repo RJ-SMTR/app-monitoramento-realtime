@@ -42,7 +42,7 @@ export default function BusMarkerSPPO({ id, data }) {
                 rotationAngle={0}
                 key={id}
             >
-                <Popup>
+               <Popup>
                         {data.ordem ? <h4 className="mb-3"> Veículo: {data.ordem} </h4> : <></>}
                         <div className="flex" >
                             <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
