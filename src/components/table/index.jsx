@@ -31,7 +31,7 @@ function Tables() {
   return (
     <div >
         
-        <table>
+          <table className=" border-separate border-spacing-1 ">
             <thead>
                 <th>
                     BRT
@@ -66,7 +66,7 @@ function Tables() {
 
                 
             </tbody>
-        </table>
+        </table >
           <div className="my-10">
              <div className="my-10">
              <label  >Selecionar Linha SPPO: </label>
@@ -81,7 +81,7 @@ function Tables() {
                 />
          </div>
          </div>
-          <table className="flex">
+          <table className=" border-separate border-spacing-1 ">
               <thead>
                 <tr>SPPO</tr>
                   <tr>

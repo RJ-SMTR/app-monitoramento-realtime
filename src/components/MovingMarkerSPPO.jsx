@@ -42,13 +42,18 @@ export default function BusMarkerSPPO({ id, data }) {
                 rotationAngle={0}
                 key={id}
             >
-                <Popup>
-                    {data.ordem ? <h4 className="mb-1"> Veículo: {data.ordem} </h4> : <></>}
-                    <div className="flex items-center">
-                        <h4 > Linha: <span className="font-bold">{data.linha}</span></h4>
-                        <h4 > Velocidade: <span className="font-bold">{data.velocidade}km/h</span></h4>
-                        <h4 > Última atualização: <span className="font-bold">{trimmed[1]}</span></h4>
-                    </div>
+               <Popup>
+                        {data.ordem ? <h4 className="mb-3"> Veículo: {data.ordem} </h4> : <></>}
+                        <div className="flex" >
+                            <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
+
+                        </div>
+                        <div className="flex my-3" >
+                            <h4 > Velocidade: <p className="font-bold inline">{data.velocidade}km/h</p></h4>
+                        </div>
+                        <div className="flex" >
+                            <h4 > Última atualização: <p className="font-bold inline">{trimmed[1]}</p></h4>
+                        </div>
                 </Popup>
             </LeafletTrackingMarker>
 
