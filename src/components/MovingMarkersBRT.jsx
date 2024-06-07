@@ -41,15 +41,15 @@ export default function BusMarker({ id, data }) {
                 key={id}
             >
                 <Popup>
-              {data.codigo ? <h4 className="mb-1"> Veículo: {data.codigo} </h4> : <></>}
+                    {data.codigo ? <div className="flex mb-3" > <h4 > Veículo: {data.codigo} </h4> </div> : <></>}
                     <div className="flex" >
                         <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
 
                     </div>
-                    <div className="flex" >
+                    <div className="flex my-3" >
                         <h4 > Sentido: <span className="font-bold">{data.sentido}</span></h4>
                     </div>
-                    <div className="flex" >
+                    <div className="flex my-3" >
                         <h4 > Velocidade: <span className="font-bold">{data.velocidade}km/h</span></h4>
                     </div>
                     <div className="flex" >
