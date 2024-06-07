@@ -54,6 +54,20 @@ export default function BusMarkerSPPO({ id, data }) {
                         <div className="flex" >
                             <h4 > Última atualização: <p className="font-bold inline">{trimmed[1]}</p></h4>
                         </div>
+
+                        <div className="flex my-3" >
+                            <h4 > Chassi: <p className="font-bold inline">{data.nome_chassi}</p></h4>
+                        </div>
+                        <div className="flex" >
+                            <h4 > Ano Fabricação: <p className="font-bold inline">{data.ano_fabricacao}</p></h4>
+                        </div>
+                        <div className="flex my-3" >
+                            <h4 > Carroceria: <p className="font-bold inline">{data.carroceria}</p></h4>
+                        </div>
+                        <div className="flex" >
+                            <h4 className="leading-3"> Tipo de Veículo: <p className="font-bold inline py-4">{data.tipo_veiculo}</p></h4>
+                        </div>
+
                 </Popup>
             </LeafletTrackingMarker>
 
