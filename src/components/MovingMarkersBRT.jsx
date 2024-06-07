@@ -40,16 +40,19 @@ export default function BusMarker({ id, data }) {
                 rotationAngle={0}
                 key={id}
             >
-                <Popup>
+                <Popup><<<<<<< develop
                     {data.codigo ? <div className="flex mb-3" > <h4 > Veículo: {data.codigo} </h4> </div> : <></>}
+
                     <div className="flex" >
                         <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
 
                     </div>
+
                     <div className="flex my-3" >
                         <h4 > Sentido: <span className="font-bold">{data.sentido}</span></h4>
                     </div>
                     <div className="flex my-3" >
+
                         <h4 > Velocidade: <span className="font-bold">{data.velocidade}km/h</span></h4>
                     </div>
                     <div className="flex" >
