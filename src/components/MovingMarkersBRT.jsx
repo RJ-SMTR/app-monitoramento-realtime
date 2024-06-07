@@ -40,7 +40,9 @@ export default function BusMarker({ id, data }) {
                 rotationAngle={0}
                 key={id}
             >
+
                 <Popup>
+
                     {data.codigo ? <div className="flex mb-3" > <h4 > Veículo: {data.codigo} </h4> </div> : <></>}
 
                     <div className="flex" >
