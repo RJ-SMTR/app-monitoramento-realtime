@@ -43,7 +43,7 @@ export default function BusMarkerSPPO({ id, data }) {
                 key={id}
             >
                <Popup>
-                        {data.ordem ? <h4 className="mb-3"> Veículo: {data.ordem} </h4> : <></>}
+                    {data.ordem ? <h4 className="mb-3 "> Veículo:<p className="font-bold inline"> {data.ordem}</p> </h4> : <></>}
                         <div className="flex" >
                             <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
 
@@ -51,21 +51,21 @@ export default function BusMarkerSPPO({ id, data }) {
                         <div className="flex my-3" >
                             <h4 > Velocidade: <p className="font-bold inline">{data.velocidade}km/h</p></h4>
                         </div>
-                        <div className="flex" >
+                    <div className="flex  my-3" >
                             <h4 > Última atualização: <p className="font-bold inline">{trimmed[1]}</p></h4>
                         </div>
 
                         <div className="flex my-3" >
                             <h4 > Chassi: <p className="font-bold inline">{data.nome_chassi}</p></h4>
                         </div>
-                        <div className="flex" >
+                    <div className="flex" >
                             <h4 > Ano Fabricação: <p className="font-bold inline">{data.ano_fabricacao}</p></h4>
                         </div>
-                        <div className="flex my-3" >
+                        <div className="flex mt-3 mb-2" >
                             <h4 > Carroceria: <p className="font-bold inline">{data.carroceria}</p></h4>
                         </div>
                         <div className="flex" >
-                            <h4 className="leading-3"> Tipo de Veículo: <p className="font-bold inline py-4">{data.tipo_veiculo}</p></h4>
+                            <h4 className="leading-4"> Tipo de Veículo: <p className="font-bold inline">{data.tipo_veiculo}</p></h4>
                         </div>
 
                 </Popup>
