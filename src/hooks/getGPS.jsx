@@ -29,10 +29,9 @@ export function GPSProvider({ children }) {
         const formattedDataInicial = format(fiveMinutesAgo, "yyyy-MM-dd HH:mm:ss");
         const formattedDataFinal = format(currentDate, "yyyy-MM-dd HH:mm:ss");
 
-        await axios.get(`https://api.mobilidade.rio/dados/gps/sppo?data_inicial=${formattedDataInicial}&data_final=${formattedDataFinal}`)
+        await axios.get(`https://dados.mobilidade.rio/gps/sppo?data_inicial=${formattedDataInicial}&data_final=${formattedDataFinal}`)
             .then((response) => {
-                console.log(response.data)
-                response.data.results.forEach((item) => {
+                response.data.forEach((item) => {
                     allSPPO.push(item)
                 })
                 setRealtimeSPPO([...allSPPO])
