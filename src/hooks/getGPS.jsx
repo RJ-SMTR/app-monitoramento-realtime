@@ -31,7 +31,6 @@ export function GPSProvider({ children }) {
 
         await axios.get(`https://dados.mobilidade.rio/gps/sppo?data_inicial=${formattedDataInicial}&data_final=${formattedDataFinal}`)
             .then((response) => {
-                console.log(response.data)
                 response.data.forEach((item) => {
                     allSPPO.push(item)
                 })
