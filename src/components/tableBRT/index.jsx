@@ -28,9 +28,9 @@ function TablesBRT() {
     };
 
     return (
-        <div >
+        <div>
             <div className="my-10">
-                <label >Selecionar Linha BRT: </label>
+                <label className="w-full" >Selecionar Linha BRT: </label>
                 <Select
                     value={selectedBRT}
                     onChange={handleChange}
@@ -41,7 +41,7 @@ function TablesBRT() {
                     className="select"
                 />
             </div>
-            <table className="flex">
+            <table className=" border-separate border-spacing-1 ">
                 <thead>
                     <tr>BRT</tr>
                     <tr>
