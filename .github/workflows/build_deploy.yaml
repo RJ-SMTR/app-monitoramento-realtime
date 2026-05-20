@@ -1,0 +1,97 @@
+name: Build and deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      namespace:
+        required: true
+        type: string
+      ingress_name:
+        required: true
+        type: string
+      ingress_url:
+        required: true
+        type: string
+      service:
+        required: true
+        type: string
+      pod_name:
+        required: true
+        type: string
+      secret_name:
+        required: true
+        type: string
+      replicas:
+        required: true
+        type: string
+jobs:
+  changes:
+    name: Check changes
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.filter.outputs.build }}
+      deploy: ${{ steps.filter.outputs.deploy }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            build:
+              - '!k8s/**'
+            deploy:
+              - 'k8s/**'
+          base: ${{ github.head_ref || github.ref_name }}
+
+  build:
+    name: Build
+    needs: changes
+    if: ${{ needs.changes.outputs.build == 'true' }}
+    uses: ./.github/workflows/build.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      image: ${{ inputs.image }}
+    secrets: inherit
+
+  deploy-after-build:
+    name: Deploy after build
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      image: ${{ inputs.image }}
+      namespace: ${{ inputs.namespace }}
+      tag: ${{ github.sha }}
+      ingress_name: ${{ inputs.ingress_name }}
+      ingress_url: ${{ inputs.ingress_url }}
+      service: ${{ inputs.service }}
+      pod_name: ${{ inputs.pod_name }}
+      secret_name: ${{ inputs.secret_name }}
+      replicas: ${{ inputs.replicas }}
+    secrets: inherit
+
+  deploy-immediately:
+    name: Deploy immediately
+    needs: changes
+    if: needs.changes.outputs.build == 'false' && needs.changes.outputs.deploy == 'true'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      image: ${{ inputs.image }}
+      namespace: ${{ inputs.namespace }}
+      tag: latest
+      ingress_name: ${{ inputs.ingress_name }}
+      ingress_url: ${{ inputs.ingress_url }}
+      service: ${{ inputs.service }}
+      pod_name: ${{ inputs.pod_name }}
+      secret_name: ${{ inputs.secret_name }}
+      replicas: ${{ inputs.replicas }}
+    secrets: inherit

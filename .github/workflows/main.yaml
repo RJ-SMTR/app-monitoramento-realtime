@@ -1,0 +1,22 @@
+name: main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    uses: ./.github/workflows/build_deploy.yaml
+    with:
+      environment: production
+      image: app-monitoramento-realtime
+      namespace: monitoramento-realtime
+      ingress_name: app-monitoramento-realtime-ingress
+      ingress_url: monitoramento-realtime.mobilidade.rio
+      service: app-monitoramento-realtime-svc
+      pod_name: app-monitoramento-realtime
+      secret_name: app-monitoramento-realtime-ingress
+      replicas: 6
+    secrets: inherit
