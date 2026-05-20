@@ -9,13 +9,33 @@ import { format} from "date-fns";
 
 
 
-export default function BusMarkerSPPO({ id, data }) {
+export default function BusMarkerSPPO({ id, data, color }) {
     const [prevPositions, setPrevPositions] = useState({});
     const latitude = parseFloat(data.latitude.replace(',', '.'));
     const longitude = parseFloat(data.longitude.replace(',', '.'));
     const time =  new Date(parseFloat(data.datahora))
     const formattedHora = format(time, "yyyy-MM-dd HH:mm:ss")
     const trimmed = formattedHora.match(/(\d{2}:\d{2}:\d{2})/)
+
+    function createMarker(color) {
+        return new L.Icon({
+            iconUrl:
+                "data:image/svg+xml;charset=UTF-8," +
+                encodeURIComponent(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14">
+                        <circle
+                            cx="7"
+                            cy="7"
+                            r="6"
+                            fill="${color}"
+                            stroke="black"
+                            stroke-width="1"
+                        />
+                    </svg>
+                `),
+            iconSize: [14, 14],
+        });
+    }
 
     useEffect(() => {
         setPrevPositions((prevPositions) => ({
@@ -25,10 +45,18 @@ export default function BusMarkerSPPO({ id, data }) {
     }, [id, latitude, longitude]);
 
     const prevPos = prevPositions[id] || [latitude, longitude];
-    const customMarker = new L.Icon({
-        iconUrl: marker,
-        iconSize: [14, 14]
-    });
+
+    let customMarker
+    if (color && Object.keys(color).length > 0) {
+        customMarker = createMarker(color.cor_hex);
+    } else {
+        customMarker = createMarker("#FFFFFF");
+        // customMarker = new L.Icon({
+        //     iconUrl: marker,
+        //     iconSize: [14, 14]
+        // });
+    }
+    
 
 
     return (

@@ -1,9 +1,35 @@
-import { useContext} from "react"
+import { useContext, useState } from "react"
 import { MovingMarkerContext } from "../../hooks/getMovingMarkers"
 import Select from 'react-select';
 
 function Tables() {
-    const {tracked, trackedSPPO, selectedLinhas, setSelectedLinhas, setShowSPPO, setShowBRT, showBRT, showSPPO} = useContext(MovingMarkerContext)
+    const {tracked, trackedSPPO, selectedLinhas, setSelectedLinhas, setShowSPPO, setShowBRT, showBRT, showSPPO, enabledColors, setEnabledColors, colors } = useContext(MovingMarkerContext)
+    const [allColors, setAllColors] = useState(true)
+    const toggleColor = (color) => {
+        setEnabledColors((prev) =>(
+            {
+            ...prev,
+            [color]: !prev[color],
+            })
+        );
+    };
+
+    const toggleAllColors = () => {
+        setAllColors((prevAllColors) => {
+
+            setEnabledColors(prev =>
+                Object.fromEntries(
+                    Object.entries(prev).map(([color, value]) => [
+                    color,
+                    !prevAllColors,
+                    ])
+                )
+                );
+
+            return !prevAllColors
+        }
+        )
+    }
 
     function countLinhas(data) {
         const linhaCounts = {};
@@ -101,6 +127,56 @@ function Tables() {
                   }
               </tbody>
           </table>
+
+          <table className="my-10 text-left">
+            <thead>
+                <th className="p-1">
+                    Nova Pintura
+                </th>
+            </thead>
+            <tbody>
+                  <tr>
+                    <td className="p-2">
+                    <div className="flex items-center gap-2">
+                        <input
+                        type="checkbox"
+                        checked={allColors}
+                        onChange={toggleAllColors}
+                        />
+                        <span>
+                        <b>Todos</b>
+                        </span>
+                    </div>
+                    </td>
+                  </tr>
+                {
+                    Object.entries(colors).map(([area, color], index) => (
+                        <tr key={index}>
+                            <td className="p-2">
+                            <div className="flex items-center gap-2">
+                                <input
+                                type="checkbox"
+                                checked={enabledColors[color]}
+                                onChange={() => toggleColor(color)}
+                                />
+
+                                <div
+                                className="w-4 h-4 rounded-sm border border-black"
+                                style={{ backgroundColor: color }}
+                                ></div>
+
+                                <span>
+                                {area}
+                                </span>
+                            </div>
+                            </td>
+                        </tr>
+                        ))
+                }
+
+            </tbody>
+        </table >
+          
     </div>
   )
 }

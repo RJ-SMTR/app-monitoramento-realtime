@@ -8,6 +8,7 @@ export const GPSContext = createContext()
 export function GPSProvider({ children }) {
     const [realtimeBrt, setRealtimeBrt] = useState([])
     const [realtimeSPPO, setRealtimeSPPO] = useState([])
+    const [paintColors, setPaintColors] = useState({})
 
     let allBuses = [];
 
@@ -38,7 +39,17 @@ export function GPSProvider({ children }) {
                 allSPPO = []
             })
     }
+    async function getPaintColors() {
+        const { data } = await axios.get('https://dados.mobilidade.rio/api/monitoramento-realtime/');
+        const allColors = {};
+        data.forEach((item) => {
+            allColors[item.ordem] = item;
+        });
+        setPaintColors(allColors);
+    }
+
     function getGPSAndSPPO() {
+        getPaintColors()
         getGPS()
         getSPPO()
     }
@@ -53,7 +64,7 @@ export function GPSProvider({ children }) {
     }, []);
 
     return (
-        <GPSContext.Provider value={{ realtimeBrt, getGPS, realtimeSPPO }}>
+        <GPSContext.Provider value={{ realtimeBrt, getGPS, realtimeSPPO, paintColors }}>
             {children}
         </GPSContext.Provider>
     )

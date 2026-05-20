@@ -12,14 +12,27 @@ export const MovingMarkerContext = createContext()
 
 
 export function MovingMarkerProvider({ children }) {
+    const colors = {
+        "Área A": "#8031A7",
+        "Área B": "#FF7500",
+        "Área C": "#9E652E",
+        "Área D": "#71C5E8",
+        "Área E": "#F04E98",
+        "Área F": "#1FA824",
+        "Área G": "#0047BB",
+        "Área H": "#E4002B",
+        "Área I": "#B1B3B3",
+        "Demais": "#FFFFFF",
+}
 
-    const { realtimeBrt, realtimeSPPO } = useContext(GPSContext)
+    const { realtimeBrt, realtimeSPPO, paintColors } = useContext(GPSContext)
     const [tracked, setTracked] = useState([])
     const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [selectedBRT, setSelectedBRT] = useState(null)
     const [trackedSPPO, setTrackedSPPO] = useState([])
     const [showBRT, setShowBRT] = useState(true);
     const [showSPPO, setShowSPPO] = useState(true);
+    const [enabledColors, setEnabledColors] = useState(Object.fromEntries( Object.values(colors).map(color => [color, true])));
 
     const wktToGeoJson = (wkt) => {
         const geometry = wellknown.parse(wkt);
@@ -106,7 +119,7 @@ export function MovingMarkerProvider({ children }) {
 
 
     return (
-        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, showBRT, setShowBRT, showSPPO, setShowSPPO }}>
+        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, showBRT, setShowBRT, showSPPO, setShowSPPO, paintColors, enabledColors, setEnabledColors, colors }}>
             {children}
         </MovingMarkerContext.Provider>
     )
