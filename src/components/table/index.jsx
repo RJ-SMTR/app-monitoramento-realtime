@@ -105,8 +105,14 @@ function Tables() {
     }
 
     const colorCounts = countColors(trackedSPPO, paintColors, colors);
-    console.log(colorCounts)
-  return (
+
+    const paintedTotal = Object.entries(colorCounts)
+    .filter(([area]) => area.toLowerCase() !== "demais")
+    .reduce((sum, [, count]) => sum + count, 0);
+
+    const othersTotal = colorCounts["Demais"] || 0;
+
+    return (
     <div >
         
           <table className=" border-separate border-spacing-1 ">
@@ -208,6 +214,10 @@ function Tables() {
                     </td>
 
                     <td></td>
+                </tr>
+                <tr>
+                    <td className="pl-2">Total: {paintedTotal}</td>
+                    <td className="pl-2">Total: {othersTotal}</td>
                 </tr>
 
                 {Object.entries(normalColors).map(([area, color], index) => {
