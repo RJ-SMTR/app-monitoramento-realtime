@@ -30,7 +30,7 @@ function TablesBRT() {
     return (
         <div>
             <div className="my-10">
-                <label className="w-full" >Selecionar Linha BRT: </label>
+                <label className="block mb-2" >Selecionar Linha BRT: </label>
                 <Select
                     value={selectedBRT}
                     onChange={handleChange}

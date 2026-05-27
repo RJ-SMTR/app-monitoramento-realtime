@@ -1,0 +1,22 @@
+name: homol
+
+on:
+  push:
+    branches:
+      - homol
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    uses: ./.github/workflows/build_deploy.yaml
+    with:
+      environment: homol
+      image: homol-app-monitoramento-realtime
+      namespace: monitoramento-realtime
+      ingress_name: homol-app-monitoramento-realtime-ingress
+      ingress_url: homol.monitoramento-realtime.mobilidade.rio
+      service: homol-app-monitoramento-realtime-svc
+      pod_name: homol-app-monitoramento-realtime
+      secret_name: homol-app-monitoramento-realtime-ingress
+      replicas: 1
+    secrets: inherit

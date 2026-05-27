@@ -1,0 +1,90 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      namespace:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+      ingress_name:
+        required: true
+        type: string
+      ingress_url:
+        required: true
+        type: string
+      service:
+        required: true
+        type: string
+      pod_name:
+        required: true
+        type: string
+      secret_name:
+        required: true
+        type: string
+      replicas:
+        required: true
+        type: string
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: ${{ secrets.GAR_LOCATION }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  REPOSITORY: ${{ secrets.REPOSITORY }}
+  IMAGE: ${{ inputs.image }}
+  NAMESPACE: ${{ inputs.namespace }}
+  ENVIRONMENT: ${{ inputs.environment }}
+  TAG: ${{ inputs.tag }}
+  INGRESS_NAME: ${{ inputs.ingress_name }}
+  INGRESS_URL: ${{ inputs.ingress_url }}
+  SERVICE: ${{ inputs.service }}
+  POD_NAME: ${{ inputs.pod_name }}
+  SECRET_NAME: ${{ inputs.secret_name }}
+  REPLICAS: ${{ inputs.replicas }}
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Setup gcloud CLI
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+
+      # Set up kustomize
+      - name: Set up Kustomize
+        run: |-
+          curl -sfL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz | tar -xvz
+          chmod u+x ./kustomize
+
+      # Deploy the Docker image to the GKE cluster
+      - name: Deploy
+        run: |-
+          ./kustomize build . | envsubst | kubectl apply -n $NAMESPACE -f -

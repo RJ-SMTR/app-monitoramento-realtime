@@ -10,7 +10,7 @@ import TablesBRT from "./components/tableBRT"
 import Logos from "./components/logos"
 
 function App() {
-  const { tracked, trackedSPPO, selectedLinhas, selectedBRT, showSPPO, showBRT } = useContext(MovingMarkerContext)
+  const { tracked, trackedSPPO, selectedLinhas, selectedBRT, showSPPO, showBRT, paintColors, enabledColors } = useContext(MovingMarkerContext)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -79,9 +79,21 @@ function App() {
           {showSPPO && trackedSPPO
             ? trackedSPPO
               .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.linha))
+              .filter(e => {
+                const vehicle = paintColors[e.ordem]
+                let color_hex
+                if (vehicle){
+                  color_hex = vehicle.cor_hex
+                } else {
+                  color_hex = "#FFFFFF"
+                }
+                return (
+                 enabledColors[color_hex]
+                );
+              })
               .map(e => (
                 <div key={e.ordem}>
-                  <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} />
+                  <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} color={paintColors[e.ordem]} />
                 </div>
               ))
             : <></>
