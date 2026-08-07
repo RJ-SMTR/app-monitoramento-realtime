@@ -12,7 +12,7 @@ export default function BusMarkerSPPO({ id, data, color }) {
     const [prevPositions, setPrevPositions] = useState({});
     const latitude = parseFloat(data.latitude.replace(',', '.'));
     const longitude = parseFloat(data.longitude.replace(',', '.'));
-    const time =  new Date(parseFloat(data.datahora))
+    const time =  new Date(data.datetime)
     const formattedHora = format(time, "yyyy-MM-dd HH:mm:ss")
     const trimmed = formattedHora.match(/(\d{2}:\d{2}:\d{2})/)
 
@@ -66,9 +66,9 @@ export default function BusMarkerSPPO({ id, data, color }) {
                 key={id}
             >
                <Popup>
-                    {data.ordem ? <h4 className="mb-3 "> Veículo:<p className="font-bold inline"> {data.ordem}</p> </h4> : <></>}
+                    {data.id_veiculo ? <h4 className="mb-3 "> Veículo:<p className="font-bold inline"> {data.id_veiculo}</p> </h4> : <></>}
                         <div className="flex" >
-                            <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
+                            <h4 > Linha: <p className="font-bold inline">{data.servico}</p></h4>
 
                         </div>
                         <div className="flex my-3" >

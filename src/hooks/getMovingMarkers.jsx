@@ -74,13 +74,13 @@ export function MovingMarkerProvider({ children }) {
 
 
             const uniqueItems = realtimeSPPO.reduce((uniqueItems, item) => {
-                const existingItemIndex = uniqueItems.findIndex(existingItem => existingItem.ordem === item.ordem)
+                const existingItemIndex = uniqueItems.findIndex(existingItem => existingItem.id_veiculo === item.id_veiculo)
 
                 if (existingItemIndex === -1) {
                     uniqueItems.push(item)
                 } else {
-                    const existingDatahora = uniqueItems[existingItemIndex].datahora
-                    const newDatahora = item.datahora
+                    const existingDatahora = uniqueItems[existingItemIndex].datetime
+                    const newDatahora = item.datetime
 
                     if (newDatahora > existingDatahora) {
                         uniqueItems[existingItemIndex] = item;

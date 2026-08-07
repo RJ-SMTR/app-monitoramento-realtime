@@ -34,7 +34,7 @@ function Tables() {
     function countLinhas(data) {
         const linhaCounts = {};
         data.forEach(item => {
-            const linha = item.linha;
+            const linha = item.servico;
             if (linhaCounts[linha]) {
                 linhaCounts[linha] += 1;
             } else {
@@ -80,7 +80,7 @@ function Tables() {
         );
 
         trackedSPPO.forEach(bus => {
-            const ordem = bus.ordem;
+            const ordem = bus.id_veiculo;
 
             const paint = paintColors[ordem];
 

@@ -78,9 +78,9 @@ function App() {
       <LayerGroup>
           {showSPPO && trackedSPPO
             ? trackedSPPO
-              .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.linha))
+              .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.servico))
               .filter(e => {
-                const vehicle = paintColors[e.ordem]
+                const vehicle = paintColors[e.id_veiculo]
                 let color_hex
                 if (vehicle){
                   color_hex = vehicle.cor_hex
@@ -92,8 +92,8 @@ function App() {
                 );
               })
               .map(e => (
-                <div key={e.ordem}>
-                  <BusMarkerSPPO key={e.ordem} id={e.ordem} data={e} color={paintColors[e.ordem]} />
+                <div key={e.id_veiculo}>
+                  <BusMarkerSPPO key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} />
                 </div>
               ))
             : <></>
