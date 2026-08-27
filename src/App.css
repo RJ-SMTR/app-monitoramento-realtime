@@ -12,6 +12,12 @@
 .leaflet-popup-content{
                       line-height: .3 !important;
 }
+
+
+.leaflet-tile-pane {
+  filter: grayscale(0.6);
+}
+
 .search{
   z-index: 11111;
   position: fixed;
