@@ -3,7 +3,14 @@ import { MovingMarkerContext } from "../../hooks/getMovingMarkers"
 import Select from 'react-select';
 
 function Tables() {
-    const {tracked, trackedSPPO, selectedLinhas, setSelectedLinhas, setShowSPPO, setShowBRT, showBRT, showSPPO, enabledColors, setEnabledColors, colors, paintColors } = useContext(MovingMarkerContext)
+    const {
+        tracked, trackedSPPO, trackedSistemaRio,
+        selectedLinhas, setSelectedLinhas,
+        selectedSistemaRio, setSelectedSistemaRio,
+        setShowSPPO, setShowBRT, setShowSistemaRio,
+        showBRT, showSPPO, showSistemaRio,
+        enabledColors, setEnabledColors, colors, paintColors,
+    } = useContext(MovingMarkerContext)
     const [allColors, setAllColors] = useState(true)
     const toggleColor = (color) => {
         setEnabledColors((prev) =>(
@@ -44,14 +51,24 @@ function Tables() {
         return linhaCounts;
     }
     const linhaCounts = countLinhas(trackedSPPO);
+    const linhaCountsSistemaRio = countLinhas(trackedSistemaRio);
 
     const options = Object.keys(linhaCounts).map(linha => ({
         value: linha,
         label: linha,
     }));
 
+    const optionsSistemaRio = Object.keys(linhaCountsSistemaRio).map(linha => ({
+        value: linha,
+        label: linha,
+    }));
+
     const handleChange = selectedOptions => {
         setSelectedLinhas(selectedOptions);
+    };
+
+    const handleChangeSistemaRio = selectedOptions => {
+        setSelectedSistemaRio(selectedOptions);
     };
 
     const normalColors = Object.fromEntries(
@@ -66,7 +83,7 @@ function Tables() {
         )
     );
 
-    function countColors(trackedSPPO, paintColors, colors) {
+    function countColors(onibusTracked, paintColors, colors) {
         const counts = {};
 
         Object.keys(colors).forEach(area => {
@@ -79,7 +96,7 @@ function Tables() {
             Object.entries(colors).map(([area, hex]) => [hex, area])
         );
 
-        trackedSPPO.forEach(bus => {
+        onibusTracked.forEach(bus => {
             const ordem = bus.id_veiculo;
 
             const paint = paintColors[ordem];
@@ -104,7 +121,8 @@ function Tables() {
         return counts;
     }
 
-    const colorCounts = countColors(trackedSPPO, paintColors, colors);
+    const onibusTracked = [...trackedSPPO, ...trackedSistemaRio];
+    const colorCounts = countColors(onibusTracked, paintColors, colors);
 
     const paintedTotal = Object.entries(colorCounts)
     .filter(([area]) => area.toLowerCase() !== "demais")
@@ -123,13 +141,20 @@ function Tables() {
                 <th>
                   SPPO
                 </th>
+                <th>
+                  Sistema Rio
+                </th>
             </thead>
             <tbody>
                 <tr>
                       <td> {tracked.length}</td>
-                      
+
                       <td>
                           {trackedSPPO.length}
+                      </td>
+
+                      <td>
+                          {trackedSistemaRio.length}
                       </td>
                 </tr>
                 <tr>
@@ -138,7 +163,7 @@ function Tables() {
                           checked={showBRT}
                           onChange={() => setShowBRT(!showBRT)}
                       /></td>
-                      
+
                       <td>
                           <input
                               type="checkbox"
@@ -146,9 +171,17 @@ function Tables() {
                               onChange={() => setShowSPPO(!showSPPO)}
                           />
                       </td>
+
+                      <td>
+                          <input
+                              type="checkbox"
+                              checked={showSistemaRio}
+                              onChange={() => setShowSistemaRio(!showSistemaRio)}
+                          />
+                      </td>
                 </tr>
 
-                
+
             </tbody>
         </table >
           <div className="my-10">
@@ -183,7 +216,44 @@ function Tables() {
                               <td>{linhaCounts[selectedLinha.value]}</td>
                           </tr>
                       ))
-                     
+
+                  }
+              </tbody>
+          </table>
+
+          <div className="my-10">
+             <div className="my-10">
+             <label className="block mb-2">
+                Selecionar Linha Sistema Rio:
+            </label>
+                <Select
+                    value={selectedSistemaRio}
+                    onChange={handleChangeSistemaRio}
+                    options={optionsSistemaRio}
+                    isMulti
+                    isSearchable
+                    placeholder="Ex.: 101"
+                    className="select"
+                />
+         </div>
+         </div>
+          <table className=" border-separate border-spacing-1 ">
+              <thead>
+                <tr>Sistema Rio</tr>
+                  <tr>
+                      <th>Linha</th>
+                      <th>Contagem</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {selectedSistemaRio
+                      && selectedSistemaRio.map(selectedLinha => (
+                          <tr key={selectedLinha.value}>
+                              <td>{selectedLinha.value}</td>
+                              <td>{linhaCountsSistemaRio[selectedLinha.value]}</td>
+                          </tr>
+                      ))
+
                   }
               </tbody>
           </table>
@@ -208,7 +278,7 @@ function Tables() {
                             />
 
                             <span>
-                                <b>Todos ({trackedSPPO.length})</b>
+                                <b>Todos ({onibusTracked.length})</b>
                             </span>
                         </div>
                     </td>

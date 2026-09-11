@@ -25,13 +25,16 @@ export function MovingMarkerProvider({ children }) {
         "Demais": "#FFFFFF",
 }
 
-    const { realtimeBrt, realtimeSPPO, paintColors } = useContext(GPSContext)
+    const { realtimeBrt, realtimeSPPO, realtimeSistemaRio, paintColors } = useContext(GPSContext)
     const [tracked, setTracked] = useState([])
     const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [selectedBRT, setSelectedBRT] = useState(null)
+    const [selectedSistemaRio, setSelectedSistemaRio] = useState(null)
     const [trackedSPPO, setTrackedSPPO] = useState([])
+    const [trackedSistemaRio, setTrackedSistemaRio] = useState([])
     const [showBRT, setShowBRT] = useState(true);
     const [showSPPO, setShowSPPO] = useState(true);
+    const [showSistemaRio, setShowSistemaRio] = useState(true);
     const [enabledColors, setEnabledColors] = useState(Object.fromEntries( Object.values(colors).map(color => [color, true])));
 
     const wktToGeoJson = (wkt) => {
@@ -44,62 +47,27 @@ export function MovingMarkerProvider({ children }) {
     }
 
     useEffect(() => {
-        if (realtimeBrt && realtimeSPPO) {
+        if (realtimeBrt && realtimeSPPO && realtimeSistemaRio) {
             const max_latitude = -22.59
             const min_latitude = -23.13
             const max_longitude = -43.0
             const min_longitude = -43.87
 
+            const geoJsonFromWkt = wktToGeoJson(wktRio)
 
-            const wktExample = wktRio
-            const geoJsonFromWkt = wktToGeoJson(wktExample)
-
-            const uniqueTrackedItems = realtimeBrt.reduce((uniqueItems, item) => {
-                if (!uniqueItems.some(existingItem => existingItem.codigo === item.codigo)) {
-                    uniqueItems.push(item);
-                }
-                return uniqueItems;
-            }, []);
-
-
-
-            const filteredBRT = uniqueTrackedItems.filter(item => {
+            const filterInRio = (item) => {
                 const point = turf.point([item.longitude, item.latitude]);
 
-                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude && item.codigo.startsWith('90') || item.codigo.startsWith('E90') || item.codigo.startsWith('70') ;
+                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= item.latitude && item.latitude <= max_latitude && min_longitude <= item.longitude && item.longitude <= max_longitude;
+            };
 
-            });
-            const sortedBrt = filteredBRT.sort((a, b) => a.codigo - b.codigo)
+            const sortedBrt = realtimeBrt.filter(filterInRio).sort((a, b) => a.id_veiculo.localeCompare(b.id_veiculo))
             setTracked(sortedBrt);
 
-
-            const uniqueItems = realtimeSPPO.reduce((uniqueItems, item) => {
-                const existingItemIndex = uniqueItems.findIndex(existingItem => existingItem.id_veiculo === item.id_veiculo)
-
-                if (existingItemIndex === -1) {
-                    uniqueItems.push(item)
-                } else {
-                    const existingDatahora = uniqueItems[existingItemIndex].datetime
-                    const newDatahora = item.datetime
-
-                    if (newDatahora > existingDatahora) {
-                        uniqueItems[existingItemIndex] = item;
-                    }
-                }
-
-                return uniqueItems;
-            }, []);
-            const filteredSPPO = uniqueItems.filter(item => {
-                const latitude = parseFloat(item.latitude.replace(',', '.'));
-                const longitude = parseFloat(item.longitude.replace(',', '.'));
-                const point = turf.point([longitude, latitude]);
-
-                return turf.booleanPointInPolygon(point, geoJsonFromWkt) && min_latitude <= latitude && latitude <= max_latitude && min_longitude <= longitude && longitude <= max_longitude;
-            });
-            setTrackedSPPO(filteredSPPO);
-
+            setTrackedSPPO(realtimeSPPO.filter(filterInRio));
+            setTrackedSistemaRio(realtimeSistemaRio.filter(filterInRio));
         }
-    }, [realtimeBrt, realtimeSPPO]);
+    }, [realtimeBrt, realtimeSPPO, realtimeSistemaRio]);
 
 
 
@@ -119,7 +87,7 @@ export function MovingMarkerProvider({ children }) {
 
 
     return (
-        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, showBRT, setShowBRT, showSPPO, setShowSPPO, paintColors, enabledColors, setEnabledColors, colors }}>
+        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, trackedSistemaRio, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, selectedSistemaRio, setSelectedSistemaRio, showBRT, setShowBRT, showSPPO, setShowSPPO, showSistemaRio, setShowSistemaRio, paintColors, enabledColors, setEnabledColors, colors }}>
             {children}
         </MovingMarkerContext.Provider>
     )

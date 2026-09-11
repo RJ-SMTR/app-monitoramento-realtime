@@ -8,10 +8,10 @@ import { format} from "date-fns";
 
 
 
-export default function BusMarkerSPPO({ id, data, color }) {
+export default function BusMarkerOnibus({ id, data, color, sistemaLabel }) {
     const [prevPositions, setPrevPositions] = useState({});
-    const latitude = parseFloat(data.latitude.replace(',', '.'));
-    const longitude = parseFloat(data.longitude.replace(',', '.'));
+    const latitude = data.latitude;
+    const longitude = data.longitude;
     const time =  new Date(data.datetime)
     const formattedHora = format(time, "yyyy-MM-dd HH:mm:ss")
     const trimmed = formattedHora.match(/(\d{2}:\d{2}:\d{2})/)
@@ -67,6 +67,9 @@ export default function BusMarkerSPPO({ id, data, color }) {
             >
                <Popup>
                     {data.id_veiculo ? <h4 className="mb-3 "> Veículo:<p className="font-bold inline"> {data.id_veiculo}</p> </h4> : <></>}
+                        <div className="flex mb-3" >
+                            <h4 > Sistema: <p className="font-bold inline">{sistemaLabel}</p></h4>
+                        </div>
                         <div className="flex" >
                             <h4 > Linha: <p className="font-bold inline">{data.servico}</p></h4>
 

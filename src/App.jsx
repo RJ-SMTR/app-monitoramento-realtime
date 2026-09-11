@@ -4,13 +4,24 @@ import './App.css'
 import { useMap } from 'react-leaflet/hooks'
 import { MovingMarkerContext } from "./hooks/getMovingMarkers"
 import BusMarker from "./components/MovingMarkersBRT"
-import BusMarkerSPPO from "./components/MovingMarkerSPPO"
+import BusMarkerOnibus from "./components/MovingMarkerOnibus"
 import Tables from "./components/table"
 import TablesBRT from "./components/tableBRT"
 import Logos from "./components/logos"
 
 function App() {
-  const { tracked, trackedSPPO, selectedLinhas, selectedBRT, showSPPO, showBRT, paintColors, enabledColors } = useContext(MovingMarkerContext)
+  const {
+    tracked, trackedSPPO, trackedSistemaRio,
+    selectedLinhas, selectedBRT, selectedSistemaRio,
+    showSPPO, showBRT, showSistemaRio,
+    paintColors, enabledColors,
+  } = useContext(MovingMarkerContext)
+
+  const passesColorFilter = (e) => {
+    const vehicle = paintColors[e.id_veiculo]
+    const color_hex = vehicle ? vehicle.cor_hex : "#FFFFFF"
+    return enabledColors[color_hex]
+  }
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -71,10 +82,10 @@ ri (Thailand), TomTom, 2012'
         />
         <div id="map"></div>
       <LayerGroup>
-          {showBRT && tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.linha))
+          {showBRT && tracked ? tracked.filter(e => !selectedBRT?.length || selectedBRT?.some(selected => selected.value === e.servico))
             .map(e => (
-              <div key={e.code}>
-                <BusMarker key={e.codigo} id={e.codigo} data={e} />
+              <div key={e.id_veiculo}>
+                <BusMarker key={e.id_veiculo} id={e.id_veiculo} data={e} />
               </div>
             )) : <></>}
       </LayerGroup>
@@ -82,27 +93,29 @@ ri (Thailand), TomTom, 2012'
           {showSPPO && trackedSPPO
             ? trackedSPPO
               .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.servico))
-              .filter(e => {
-                const vehicle = paintColors[e.id_veiculo]
-                let color_hex
-                if (vehicle){
-                  color_hex = vehicle.cor_hex
-                } else {
-                  color_hex = "#FFFFFF"
-                }
-                return (
-                 enabledColors[color_hex]
-                );
-              })
+              .filter(passesColorFilter)
               .map(e => (
                 <div key={e.id_veiculo}>
-                  <BusMarkerSPPO key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} />
+                  <BusMarkerOnibus key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} sistemaLabel="SPPO" />
                 </div>
               ))
             : <></>
           }
       </LayerGroup>
-      
+      <LayerGroup>
+          {showSistemaRio && trackedSistemaRio
+            ? trackedSistemaRio
+              .filter(e => !selectedSistemaRio?.length || selectedSistemaRio?.some(selected => selected.value === e.servico))
+              .filter(passesColorFilter)
+              .map(e => (
+                <div key={e.id_veiculo}>
+                  <BusMarkerOnibus key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} sistemaLabel="Sistema Rio" />
+                </div>
+              ))
+            : <></>
+          }
+      </LayerGroup>
+
         <ComponentResize />
     </MapContainer>
      

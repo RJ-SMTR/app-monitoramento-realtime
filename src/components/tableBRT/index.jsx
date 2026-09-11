@@ -7,7 +7,7 @@ function TablesBRT() {
     function countLinhas(data) {
         const linhaCounts = {};
         data.forEach(item => {
-            const linha = item.linha;
+            const linha = item.servico;
             if (linhaCounts[linha]) {
                 linhaCounts[linha] += 1;
             } else {
