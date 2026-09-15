@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 
 export const GPSContext = createContext()
 const API_BASE_URL = import.meta.env.DEV ? '/proxy-api' : 'https://its.mobilidade.rio';
@@ -46,11 +46,38 @@ function dedupById(items) {
     return Array.from(byId.values());
 }
 
+const STALE_AFTER_MS = 5 * 60 * 1000;
+
+// Em vez de substituir a lista inteira a cada busca (o que faz o mapa "piscar" quase
+// vazio sempre que uma busca chega incompleta, ex. na virada de minuto), mantemos um mapa
+// persistente por id_veiculo: cada busca só atualiza quem voltou nela, o resto continua
+// instanciado com a última posição conhecida. Um veículo só sai do mapa quando passa
+// STALE_AFTER_MS sem aparecer em nenhuma busca -- não quando uma única busca falha em
+// trazê-lo de volta.
+function mergeAndPrune(map, items) {
+    const now = Date.now();
+    dedupById(items).forEach((item) => {
+        map.set(item.id_veiculo, { position: item, lastSeen: now });
+    });
+    for (const [id, entry] of map) {
+        if (now - entry.lastSeen > STALE_AFTER_MS) {
+            map.delete(id);
+        }
+    }
+    return Array.from(map.values(), (entry) => entry.position);
+}
+
 export function GPSProvider({ children }) {
     const [realtimeBrt, setRealtimeBrt] = useState([])
     const [realtimeSPPO, setRealtimeSPPO] = useState([])
     const [realtimeSistemaRio, setRealtimeSistemaRio] = useState([])
     const [paintColors, setPaintColors] = useState({})
+
+    // Um mapa por categoria renderizada -- mesma fronteira de modo/sistema que o filtro
+    // já aplicava antes de deduplicar, só que agora persistente entre buscas.
+    const brtVehicles = useRef(new Map())
+    const sppoVehicles = useRef(new Map())
+    const sistemaRioVehicles = useRef(new Map())
 
     async function getPaintColors() {
         const { data } = await axios.get(`${LEGACY_API_BASE_URL}/api/monitoramento-realtime/`);
@@ -76,22 +103,19 @@ export function GPSProvider({ children }) {
         const brtRaw = rawData.filter((item) => item.modo === 'brt');
         const onibusRaw = rawData.filter((item) => item.modo === 'onibus');
 
-        const brt = dedupById(brtRaw);
-        const onibus = dedupById(onibusRaw);
-
-        const sppo = [];
-        const sistemaRio = [];
-        onibus.forEach((item) => {
+        const sppoRaw = [];
+        const sistemaRioRaw = [];
+        onibusRaw.forEach((item) => {
             if (classify(item) === 'sistema-rio') {
-                sistemaRio.push(item);
+                sistemaRioRaw.push(item);
             } else {
-                sppo.push(item);
+                sppoRaw.push(item);
             }
         });
 
-        setRealtimeBrt(brt);
-        setRealtimeSPPO(sppo);
-        setRealtimeSistemaRio(sistemaRio);
+        setRealtimeBrt(mergeAndPrune(brtVehicles.current, brtRaw));
+        setRealtimeSPPO(mergeAndPrune(sppoVehicles.current, sppoRaw));
+        setRealtimeSistemaRio(mergeAndPrune(sistemaRioVehicles.current, sistemaRioRaw));
     }
 
     useEffect(() => {
