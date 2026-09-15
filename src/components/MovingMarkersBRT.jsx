@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Popup } from "react-leaflet";
 import { LeafletTrackingMarker } from "react-leaflet-tracking-marker";
 import L from 'leaflet';
+import { format } from "date-fns";
 import marker from '../assets/marker.svg'
 
 
@@ -10,10 +11,9 @@ import marker from '../assets/marker.svg'
 
 export default function BusMarker({ id, data }) {
     const [prevPositions, setPrevPositions] = useState({});
-    const date = new Date(data.dataHora)
-    date.setUTCHours(date.getUTCHours() - 3)
-    const formattedDate = date.toISOString()
-    const trimmed = formattedDate.match(/(\d{2}:\d{2}:\d{2})/)
+    const time = new Date(data.datetime)
+    const formattedHora = format(time, "yyyy-MM-dd HH:mm:ss")
+    const trimmed = formattedHora.match(/(\d{2}:\d{2}:\d{2})/)
 
     useEffect(() => {
         setPrevPositions((prevPositions) => ({
@@ -43,10 +43,14 @@ export default function BusMarker({ id, data }) {
 
                 <Popup>
 
-                    {data.codigo ? <div className="flex mb-3" > <h4 > Veículo: {data.codigo} </h4> </div> : <></>}
+                    {data.id_veiculo ? <div className="flex mb-3" > <h4 > Veículo: {data.id_veiculo} </h4> </div> : <></>}
+
+                    <div className="flex mb-3" >
+                        <h4 > Modo: <span className="font-bold">BRT</span></h4>
+                    </div>
 
                     <div className="flex" >
-                        <h4 > Linha: <p className="font-bold inline">{data.linha}</p></h4>
+                        <h4 > Linha: <p className="font-bold inline">{data.servico}</p></h4>
 
                     </div>
 
