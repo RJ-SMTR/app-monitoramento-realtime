@@ -80,6 +80,13 @@
   left:0;
   display: flex;
 }
+.logo-box{
+  background-color: white;
+  padding: .4rem;
+  border-radius: .4rem;
+  display: flex;
+  align-items: center;
+}
 .info{
   background-color: white;
   color: #000;
