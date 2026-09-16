@@ -142,7 +142,7 @@ function Tables() {
                   SPPO
                 </th>
                 <th>
-                  Sistema Rio
+                  RIO
                 </th>
             </thead>
             <tbody>
@@ -224,7 +224,7 @@ function Tables() {
           <div className="my-10">
              <div className="my-10">
              <label className="block mb-2">
-                Selecionar Linha Sistema Rio:
+                Selecionar Linha RIO:
             </label>
                 <Select
                     value={selectedSistemaRio}
@@ -239,7 +239,7 @@ function Tables() {
          </div>
           <table className=" border-separate border-spacing-1 ">
               <thead>
-                <tr>Sistema Rio</tr>
+                <tr>RIO</tr>
                   <tr>
                       <th>Linha</th>
                       <th>Contagem</th>

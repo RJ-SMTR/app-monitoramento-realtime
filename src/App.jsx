@@ -109,7 +109,7 @@ ri (Thailand), TomTom, 2012'
               .filter(passesColorFilter)
               .map(e => (
                 <div key={e.id_veiculo}>
-                  <BusMarkerOnibus key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} sistemaLabel="Sistema Rio" />
+                  <BusMarkerOnibus key={e.id_veiculo} id={e.id_veiculo} data={e} color={paintColors[e.id_veiculo]} sistemaLabel="RIO" />
                 </div>
               ))
             : <></>
