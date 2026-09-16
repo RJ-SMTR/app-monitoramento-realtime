@@ -29,7 +29,6 @@ export function MovingMarkerProvider({ children }) {
     const [tracked, setTracked] = useState([])
     const [selectedLinhas, setSelectedLinhas] = useState(null)
     const [selectedBRT, setSelectedBRT] = useState(null)
-    const [selectedSistemaRio, setSelectedSistemaRio] = useState(null)
     const [trackedSPPO, setTrackedSPPO] = useState([])
     const [trackedSistemaRio, setTrackedSistemaRio] = useState([])
     const [showBRT, setShowBRT] = useState(true);
@@ -87,7 +86,7 @@ export function MovingMarkerProvider({ children }) {
 
 
     return (
-        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, trackedSistemaRio, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, selectedSistemaRio, setSelectedSistemaRio, showBRT, setShowBRT, showSPPO, setShowSPPO, showSistemaRio, setShowSistemaRio, paintColors, enabledColors, setEnabledColors, colors }}>
+        <MovingMarkerContext.Provider value={{ tracked, setTracked, trackedSPPO, trackedSistemaRio, selectedLinhas, setSelectedLinhas, selectedBRT, setSelectedBRT, showBRT, setShowBRT, showSPPO, setShowSPPO, showSistemaRio, setShowSistemaRio, paintColors, enabledColors, setEnabledColors, colors }}>
             {children}
         </MovingMarkerContext.Provider>
     )

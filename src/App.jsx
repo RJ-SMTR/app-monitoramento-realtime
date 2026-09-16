@@ -12,7 +12,7 @@ import Logos from "./components/logos"
 function App() {
   const {
     tracked, trackedSPPO, trackedSistemaRio,
-    selectedLinhas, selectedBRT, selectedSistemaRio,
+    selectedLinhas, selectedBRT,
     showSPPO, showBRT, showSistemaRio,
     paintColors, enabledColors,
   } = useContext(MovingMarkerContext)
@@ -105,7 +105,7 @@ ri (Thailand), TomTom, 2012'
       <LayerGroup>
           {showSistemaRio && trackedSistemaRio
             ? trackedSistemaRio
-              .filter(e => !selectedSistemaRio?.length || selectedSistemaRio?.some(selected => selected.value === e.servico))
+              .filter(e => !selectedLinhas?.length || selectedLinhas?.some(selected => selected.value === e.servico))
               .filter(passesColorFilter)
               .map(e => (
                 <div key={e.id_veiculo}>

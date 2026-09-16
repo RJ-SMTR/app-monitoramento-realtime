@@ -6,7 +6,6 @@ function Tables() {
     const {
         tracked, trackedSPPO, trackedSistemaRio,
         selectedLinhas, setSelectedLinhas,
-        selectedSistemaRio, setSelectedSistemaRio,
         setShowSPPO, setShowBRT, setShowSistemaRio,
         showBRT, showSPPO, showSistemaRio,
         enabledColors, setEnabledColors, colors, paintColors,
@@ -50,25 +49,15 @@ function Tables() {
         });
         return linhaCounts;
     }
-    const linhaCounts = countLinhas(trackedSPPO);
-    const linhaCountsSistemaRio = countLinhas(trackedSistemaRio);
+    const linhaCounts = countLinhas([...trackedSPPO, ...trackedSistemaRio]);
 
     const options = Object.keys(linhaCounts).map(linha => ({
         value: linha,
         label: linha,
     }));
 
-    const optionsSistemaRio = Object.keys(linhaCountsSistemaRio).map(linha => ({
-        value: linha,
-        label: linha,
-    }));
-
     const handleChange = selectedOptions => {
         setSelectedLinhas(selectedOptions);
-    };
-
-    const handleChangeSistemaRio = selectedOptions => {
-        setSelectedSistemaRio(selectedOptions);
     };
 
     const normalColors = Object.fromEntries(
@@ -187,7 +176,7 @@ function Tables() {
           <div className="my-10">
              <div className="my-10">
              <label className="block mb-2">
-                Selecionar Linha SPPO:
+                Selecionar Linha Ônibus:
             </label>
                 <Select
                     value={selectedLinhas}
@@ -202,7 +191,7 @@ function Tables() {
          </div>
           <table className=" border-separate border-spacing-1 ">
               <thead>
-                <tr>SPPO</tr>
+                <tr>Ônibus</tr>
                   <tr>
                       <th>Linha</th>
                       <th>Contagem</th>
@@ -214,43 +203,6 @@ function Tables() {
                           <tr key={selectedLinha.value}>
                               <td>{selectedLinha.value}</td>
                               <td>{linhaCounts[selectedLinha.value]}</td>
-                          </tr>
-                      ))
-
-                  }
-              </tbody>
-          </table>
-
-          <div className="my-10">
-             <div className="my-10">
-             <label className="block mb-2">
-                Selecionar Linha RIO:
-            </label>
-                <Select
-                    value={selectedSistemaRio}
-                    onChange={handleChangeSistemaRio}
-                    options={optionsSistemaRio}
-                    isMulti
-                    isSearchable
-                    placeholder="Ex.: 101"
-                    className="select"
-                />
-         </div>
-         </div>
-          <table className=" border-separate border-spacing-1 ">
-              <thead>
-                <tr>RIO</tr>
-                  <tr>
-                      <th>Linha</th>
-                      <th>Contagem</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {selectedSistemaRio
-                      && selectedSistemaRio.map(selectedLinha => (
-                          <tr key={selectedLinha.value}>
-                              <td>{selectedLinha.value}</td>
-                              <td>{linhaCountsSistemaRio[selectedLinha.value]}</td>
                           </tr>
                       ))
 
